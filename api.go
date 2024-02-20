@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"os"
 
 	"github.com/Luzifer/ots/pkg/metrics"
 	"github.com/Luzifer/ots/pkg/storage"
@@ -38,6 +39,7 @@ type apiResponse struct {
 
 type apiRequest struct {
 	Secret string `json:"secret"`
+	Password string `json:"password"`
 }
 
 func newAPI(s storage.Storage, c *metrics.Collector) *apiServer {
@@ -65,6 +67,7 @@ func (a apiServer) handleCreate(res http.ResponseWriter, r *http.Request) {
 	var (
 		expiry = cfg.SecretExpiry
 		secret string
+		password string
 	)
 
 	if !cust.DisableExpiryOverride {
@@ -89,8 +92,15 @@ func (a apiServer) handleCreate(res http.ResponseWriter, r *http.Request) {
 			return
 		}
 		secret = tmp.Secret
+		password = tmp.Password
 	} else {
 		secret = r.FormValue("secret")
+		password = r.FormValue("password")
+	}
+	
+	if password != os.Getenv("Password") {
+		a.errorResponse(res, http.StatusForbidden, errors.New("wrong password"), "")
+		return
 	}
 
 	if secret == "" {

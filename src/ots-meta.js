@@ -13,6 +13,8 @@ class OTSMeta {
   /** @type Number */
   #version = 1.0
 
+  #password = ''
+
   /**
    * @param {String | null} jsonString JSON string representation of OTSMeta created by serialize
    */
@@ -30,6 +32,7 @@ class OTSMeta {
     const data = JSON.parse(jsonString.replace(/^OTSMeta/, ''))
 
     this.#secret = data.secret
+    this.#password = data.password
     this.#version = data.v
 
     for (const f of data.attachments || []) {
@@ -50,12 +53,21 @@ class OTSMeta {
     this.#secret = secret
   }
 
+  set password(password) {
+    this.#password = password
+  }
+
+  get password() {
+    return this.#password
+  }
+
   /**
    * @returns {Promise<string>}
    */
   serialize() {
     const output = {
       secret: this.#secret,
+      password: this.#password,
       v: this.#version,
     }
 

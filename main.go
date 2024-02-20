@@ -169,13 +169,13 @@ func assetDelivery(w http.ResponseWriter, r *http.Request) {
 	dot := strings.LastIndex(assetName, ".")
 	if dot < 0 {
 		// There are no assets with no dot in it
-		http.Error(w, "404 not found", http.StatusNotFound)
+		assetName = "index.html"
 		return
 	}
 
 	ext := assetName[dot:]
 	assetData, err := assets.ReadFile(assetName)
-	if err != nil {
+	if err != nil {				
 		http.Error(w, "404 not found", http.StatusNotFound)
 		return
 	}

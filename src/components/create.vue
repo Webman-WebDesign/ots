@@ -30,6 +30,15 @@
         @submit.prevent="createSecret"
       >
         <div class="col-12 mb-3">
+          <label for="createpassword">Passwort</label>
+          <input
+            type="password"
+            id="createpassword"
+            v-model="password"
+            class="form-control"            
+          />
+        </div>
+        <div class="col-12 mb-3">
           <label for="createSecretData">{{ $t('label-secret-data') }}</label>
           <grow-area
             id="createSecretData"
@@ -152,7 +161,7 @@ export default {
 
   computed: {
     canCreate() {
-      return (this.secret.trim().length > 0 || this.selectedFileMeta.length > 0) && !this.maxFileSizeExceeded && !this.invalidFilesSelected
+      return this.password.trim().length > 0 && ( this.secret.trim().length > 0 || this.selectedFileMeta.length > 0) && !this.maxFileSizeExceeded && !this.invalidFilesSelected
     },
 
     expiryChoices() {
@@ -222,6 +231,7 @@ export default {
       createRunning: false,
       fileSize: 0,
       secret: '',
+      password: '',
       securePassword: null,
       selectedExpiry: null,
       selectedFileMeta: [],
@@ -262,6 +272,7 @@ export default {
         .join('')
 
       const meta = new OTSMeta()
+      meta.password = this.password
       meta.secret = this.secret
 
       if (this.$refs.createSecretFiles) {
@@ -279,7 +290,7 @@ export default {
           }
 
           return fetch(reqURL, {
-            body: JSON.stringify({ secret }),
+            body: JSON.stringify({ secret, password: this.password }),
             headers: {
               'content-type': 'application/json',
             },
