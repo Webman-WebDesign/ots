@@ -4,8 +4,47 @@ $web-font-path: '';
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "lato";
 
+:root,
+[data-bs-theme=light] {
+  --bs-secondary: rgb(161, 0, 0);
+  --bs-success-border-subtle: #63ad46;
+  --bs-success-bg-subtle: #63ad46;
+}
+
+:root,
+[data-bs-theme=dark] {
+  --bs-success-border-subtle: #325f21;
+  --bs-success-bg-subtle: #325f21;
+}
+
+:root {
+  --bs-primary-bg-subtle: #940004;
+  --bs-primary-border-subtle: #940004;
+}
+
 :root {
   textarea {
     font-family: monospace !important;
   }
+}
+
+.navbar {
+  --bs-navbar-color: white !important;
+  --bs-navbar-brand-hover-color: white !important;
+  --bs-navbar-hover-color: white !important;
+  --bs-navbar-disabled-color: white !important;
+  --bs-navbar-brand-color: white !important;  
+  color: white !important;
+}
+
+.card-header {
+  color: white !important;
+}
+
+.btn.btn-success:disabled {
+  background-color: #159258 !important;
+}
+
+.btn.btn-success {
+  background-color: #0f834d !important;
 }
