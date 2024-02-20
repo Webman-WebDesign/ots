@@ -4,6 +4,11 @@ $web-font-path: '';
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "lato";
 
+:root {
+  --bs-primary-bg-subtle: #940004;
+  --bs-primary-border-subtle: #940004;  
+}
+
 :root,
 [data-bs-theme=light] {
   --bs-secondary: rgb(161, 0, 0);
@@ -15,11 +20,6 @@ $web-font-path: '';
 [data-bs-theme=dark] {
   --bs-success-border-subtle: #325f21;
   --bs-success-bg-subtle: #325f21;
-}
-
-:root {
-  --bs-primary-bg-subtle: #940004;
-  --bs-primary-border-subtle: #940004;
 }
 
 :root {
