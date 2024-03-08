@@ -29,7 +29,7 @@
       >
         <div class="col form-text text-center">
           {{ $t('text-powered-by') }}
-          <a href="https://github.com/Luzifer/ots"><i class="fab fa-github" /> OTS</a>
+          <a href="https://webman-webdesign.de"><i class="fab fa-github" /> Webman OTS</a>
           {{ $root.version }}
         </div>
       </div>
