@@ -38,10 +38,9 @@
           <li class="nav-item">
             <a
               class="nav-link"
-              href="#"
-              @click.prevent="$root.navigate('/explanation')"
+              href="https://webman-webdesign.de"
             >
-              <i class="fas fa-circle-info" /> {{ $t('btn-show-explanation') }}
+              <i class="fas fa-circle-info" /> Webman-Webdesign
             </a>
           </li>
           <li class="nav-item">
