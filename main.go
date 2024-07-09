@@ -104,7 +104,7 @@ func main() {
 	collector := metrics.New()
 
 	if os.Getenv("Password") == "" {		
-		logrus.WithError(err).Fatal("Ppassword environment variable not set")
+		logrus.WithError(err).Fatal("password environment variable not set")
 	}
 
 	// Initialize index template in order not to parse it multiple times

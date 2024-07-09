@@ -6,16 +6,11 @@
         href="#"
         @click.prevent="$root.navigate('/')"
       >
-        <i
-          v-if="!$root.customize.appIcon"
-          class="fas fa-user-secret mr-1"
-        />
         <img
-          v-else
-          class="mr-1"
-          :src="$root.customize.appIcon"
+          class="mr-1 logo"
+          src="/favicon.png"
         >
-        <span v-if="!$root.customize.disableAppTitle">{{ $root.customize.appTitle }}</span>
+        <span v-if="!$root.customize.disableAppTitle">Webman - One Time Secrets</span>
       </a>
 
       <button
@@ -73,6 +68,12 @@
     </div>
   </nav>
 </template>
+
+<style scoped>
+.logo {
+  width: 28px;
+}
+</style>
 
 <script>
 export default {

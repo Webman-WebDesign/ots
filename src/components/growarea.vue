@@ -1,6 +1,7 @@
 <template>
   <textarea
     ref="area"
+    :placeholder="$props.placeholder"
     v-model="data"
     style="resize: none;"
   />
@@ -51,6 +52,11 @@ export default {
       default: '',
       type: String,
     },
+
+    placeholder: {
+      default: '',
+      type: String
+    }
   },
 
   watch: {

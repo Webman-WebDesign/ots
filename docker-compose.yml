@@ -2,7 +2,7 @@ version: "3.8"
 services:
   app:
     build:
-      context: https://github.com/Luzifer/ots.git#v1.12.0
+      context: .
     restart: always
     environment:
       # Optional, see "Customization" in README
@@ -13,6 +13,7 @@ services:
       SECRET_EXPIRY: "604800"
       # "mem" or "redis" (See README)
       STORAGE_TYPE: redis
+      Password: test
     depends_on:
       - redis
     ports:

@@ -30,19 +30,11 @@
         @submit.prevent="createSecret"
       >
         <div class="col-12 mb-3">
-          <label for="createpassword">Passwort</label>
-          <input
-            type="password"
-            id="createpassword"
-            v-model="password"
-            class="form-control"            
-          />
-        </div>
-        <div class="col-12 mb-3">
           <label for="createSecretData">{{ $t('label-secret-data') }}</label>
           <grow-area
             id="createSecretData"
             v-model="secret"
+            placeholder="Server:       https://www.webman.de&#10;Benutzer:     h.musterman&#10;Passwort:     liebe123"
             class="form-control"
             :rows="2"
           />
@@ -165,9 +157,9 @@ export default {
     },
 
     expiryChoices() {
-      const choices = [{ text: this.$t('expire-default'), value: null }]
+      const choices = [{ text: this.$tc('expire-n-days', Math.round(maxSecretExpire / 86400)) + " (Standard)", value: maxSecretExpire }]
       for (const choice of this.$root.customize.expiryChoices || defaultExpiryChoices) {
-        if (maxSecretExpire > 0 && choice > maxSecretExpire) {
+        if (maxSecretExpire > 0 && choice > maxSecretExpire && !choices.find(element => element.value == choice)) {
           continue
         }
 
@@ -231,9 +223,9 @@ export default {
       createRunning: false,
       fileSize: 0,
       secret: '',
-      password: '',
+      password: new URLSearchParams(document.location.search).get("password") || "",
       securePassword: null,
-      selectedExpiry: null,
+      selectedExpiry: maxSecretExpire,
       selectedFileMeta: [],
     }
   },
