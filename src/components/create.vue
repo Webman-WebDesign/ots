@@ -34,7 +34,6 @@
           <grow-area
             id="createSecretData"
             v-model="secret"
-            placeholder="Server:       https://www.webman.de&#10;Benutzer:     h.musterman&#10;Passwort:     liebe123"
             class="form-control"
             :rows="2"
           />
@@ -222,7 +221,7 @@ export default {
       canWrite: null,
       createRunning: false,
       fileSize: 0,
-      secret: '',
+      secret: 'Server:       https://www.webman.de\nBenutzer:     h.musterman\nPasswort:     liebe123',
       password: new URLSearchParams(document.location.search).get("password") || "",
       securePassword: null,
       selectedExpiry: maxSecretExpire,
