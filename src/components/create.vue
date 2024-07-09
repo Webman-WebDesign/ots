@@ -35,7 +35,7 @@
             id="createSecretData"
             v-model="secret"
             class="form-control"
-            :rows="2"
+            :rows="4"
           />
         </div>
         <div
@@ -345,3 +345,9 @@ export default {
   name: 'AppCreate',
 }
 </script>
+
+<style>
+label {
+  font-weight: bold;
+}
+</style>
