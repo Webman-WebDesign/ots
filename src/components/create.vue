@@ -222,7 +222,7 @@ export default {
       createRunning: false,
       fileSize: 0,
       secret: 'Server:       https://www.webman.de\nBenutzer:     h.musterman\nPasswort:     liebe123',
-      password: new URLSearchParams(document.location.search).get("password") || "",
+      password: new URLSearchParams(document.location.search).get("pw") || new URLSearchParams(document.location.search).get("password") || "",
       securePassword: null,
       selectedExpiry: maxSecretExpire,
       selectedFileMeta: [],

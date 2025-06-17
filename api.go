@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
 	"time"
-	"os"
 
 	"github.com/Luzifer/ots/pkg/metrics"
 	"github.com/Luzifer/ots/pkg/storage"
@@ -38,8 +38,9 @@ type apiResponse struct {
 }
 
 type apiRequest struct {
-	Secret string `json:"secret"`
-	Password string `json:"password"`
+	Secret   string `json:"secret"`
+	Password string `json:"password,omitempty"` // For backwards compatibility
+	Pw       string `json:"pw,omitempty"`
 }
 
 func newAPI(s storage.Storage, c *metrics.Collector) *apiServer {
@@ -65,8 +66,8 @@ func (a apiServer) handleCreate(res http.ResponseWriter, r *http.Request) {
 	}
 
 	var (
-		expiry = cfg.SecretExpiry
-		secret string
+		expiry   = cfg.SecretExpiry
+		secret   string
 		password string
 	)
 
@@ -92,12 +93,26 @@ func (a apiServer) handleCreate(res http.ResponseWriter, r *http.Request) {
 			return
 		}
 		secret = tmp.Secret
-		password = tmp.Password
+		if tmp.Pw != "" {
+			password = tmp.Pw
+		} else if tmp.Password != "" {
+			password = tmp.Password
+		} else {
+			a.errorResponse(res, http.StatusBadRequest, errors.New("password missing"), "")
+			return
+		}
 	} else {
 		secret = r.FormValue("secret")
-		password = r.FormValue("password")
+		if r.FormValue("pw") != "" {
+			password = r.FormValue("pw")
+		} else if r.FormValue("password") != "" {
+			password = r.FormValue("password")
+		} else {
+			a.errorResponse(res, http.StatusBadRequest, errors.New("password missing"), "")
+			return
+		}
 	}
-	
+
 	if password != os.Getenv("Password") {
 		a.errorResponse(res, http.StatusForbidden, errors.New("wrong password"), "")
 		return
