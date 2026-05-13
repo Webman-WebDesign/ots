@@ -13,7 +13,7 @@ services:
       SECRET_EXPIRY: "604800"
       # "mem" or "redis" (See README)
       STORAGE_TYPE: redis
-      Password: test
+      Password: ${DB_PASSWORD}
     depends_on:
       - redis
     ports:
