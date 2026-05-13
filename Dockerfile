@@ -1,7 +1,7 @@
 # Stage 1: Build
 FROM alpine:3.18 AS builder
 
-# Installiere Build-Abhängigkeiten für Go und Node.js
+# Notwendige Build-Tools installieren
 RUN apk add --no-cache \
     curl \
     git \
@@ -9,37 +9,35 @@ RUN apk add --no-cache \
     make \
     nodejs \
     npm \
-    tar \
-    unzip \
     gcc \
     musl-dev
 
 WORKDIR /app
 
-# Kopiere die Source-Dateien
+# 1. Quellcode kopieren
 COPY . .
 
-# Führe die Build-Schritte aus dem Original-Repo aus
-# Wir nutzen --unsafe-perm, falls npm Probleme mit Root-Rechten hat
-RUN make download_libs
+# 2. Frontend-Assets und Code-Generierung
+# Falls make fehlschlägt, liegt es oft an fehlenden npm-Berechtigungen
+RUN npm install && make download_libs
 RUN make generate-inner
 RUN make generate-apidocs
 
-# Go-Binary bauen
-RUN go install -ldflags "-X main.version=$(git describe --tags --always || echo dev)" -mod=readonly
+# 3. Go-Build vorbereiten
+# Wir setzen CGO_ENABLED=0 für eine statische Binary (besser für Alpine)
+# Wir nutzen 'go build' statt 'go install', um die Kontrolle über das Output-Verzeichnis zu haben
+RUN export CGO_ENABLED=0 && \
+    go build -o /ots -ldflags "-X main.version=$(git describe --tags --always || echo dev)" -mod=readonly
 
 # Stage 2: Runtime
 FROM alpine:3.18
 
-# Installiere nur die Laufzeit-Abhängigkeiten
-RUN apk add --no-cache \
-    ca-certificates \
-    tzdata
+RUN apk add --no-cache ca-certificates tzdata
 
 WORKDIR /app
 
-# Kopiere die gebaute Binary vom Builder
-COPY --from=builder /root/go/bin/ots /usr/local/bin/ots
+# Die fertig gebaute Binary und die benötigten Runtime-Files kopieren
+COPY --from=builder /ots /usr/local/bin/ots
 COPY --from=builder /app/customize.yaml.example /etc/ots/customize.yaml
 
 # Ports und Startbefehl
