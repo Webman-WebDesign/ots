@@ -31,7 +31,6 @@
         <div class="col ots-footer">
           {{ $t('text-powered-by') }}
           <a href="https://webman-webdesign.de">Webman OTS</a>
-          {{ $root.version }}
         </div>
       </div>
     </div>
