@@ -55,6 +55,7 @@
               :content="secret"
               :title="$t('tooltip-copy-to-clipboard')"
             />
+            
             <a
               class="btn btn-secondary"
               :href="secretContentBlobURL"
