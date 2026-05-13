@@ -21,7 +21,6 @@
           :content="secretUrl"
           :title="$t('tooltip-copy-to-clipboard')"
         />
-        <app-qr-button :qr-content="secretUrl" />
       </div>
       <p class="text-muted mb-1" v-html="$t('text-burn-hint')" />
       <p

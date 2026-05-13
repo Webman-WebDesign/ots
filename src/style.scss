@@ -64,7 +64,7 @@ $web-font-path: '';
   --ots-input-ro:    #f4f5f9;
   --ots-card-bg:     rgba(255,255,255,.90);
   --ots-card-blur:   blur(18px);
-  --ots-nav-bg:      #940004;
+  --ots-nav-bg:      #92141a;
   --ots-nav-blur:    blur(20px);
   --bs-body-bg:      var(--ots-bg);
   --bs-body-color:   var(--ots-text);
@@ -88,7 +88,7 @@ $web-font-path: '';
   --ots-input-ro:    rgba(18,22,40,.90);
   --ots-card-bg:     rgba(16,18,36,.78);
   --ots-card-blur:   blur(28px);
-  --ots-nav-bg:      #940004;
+  --ots-nav-bg:      #92141a;
   --ots-nav-blur:    blur(22px);
   --bs-body-bg:      var(--ots-bg);
   --bs-body-color:   var(--ots-text);
@@ -147,6 +147,7 @@ body::after {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  user-select: none;
 }
 
 /* Monospace for secret textarea */

@@ -44,7 +44,7 @@
           class="form-control"
           readonly
           :value="secret"
-          :rows="4"
+          :rows="3"
         />
         <div class="d-flex align-items-start p-0">
           <div
@@ -63,7 +63,6 @@
             >
               <i class="fas fa-fw fa-download" />
             </a>
-            <app-qr-button :qr-content="secret" />
           </div>
         </div>
       </div>
