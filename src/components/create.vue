@@ -18,19 +18,26 @@
   <!-- Creation possible -->
   <div
     v-else
-    class="card border-primary-subtle mb-3"
+    class="card ots-create-split mb-3"
   >
-    <div
-      class="card-header bg-primary-subtle"
-      v-html="$t('title-new-secret')"
-    />
-    <div class="card-body">
+    <!-- Brand panel (left, hidden on mobile) -->
+    <div class="ots-create-brand">
+      <span class="ots-brand-icon"><i class="fas fa-shield-halved" /></span>
+      <h2 class="ots-brand-heading">Neues One-Time-Secret</h2>
+    </div>
+
+    <!-- Form panel (right) -->
+    <div class="ots-create-form">
+      <div class="card-body">
       <form
         class="row"
         @submit.prevent="createSecret"
       >
         <div class="col-12 mb-3">
-          <label for="createSecretData">{{ $t('label-secret-data') }}</label>
+          <label for="createSecretData">
+            <i class="fas fa-lock me-1 text-danger opacity-75" />
+            {{ $t('label-secret-data') }}
+          </label>
           <grow-area
             id="createSecretData"
             v-model="secret"
@@ -42,7 +49,10 @@
           v-if="!$root.customize.disableFileAttachment"
           class="col-12 mb-3"
         >
-          <label for="createSecretFiles">{{ $t('label-secret-files') }}</label>
+          <label for="createSecretFiles">
+            <i class="fas fa-paperclip me-1 text-danger opacity-75" />
+            {{ $t('label-secret-files') }}
+          </label>
           <input
             id="createSecretFiles"
             ref="createSecretFiles"
@@ -87,11 +97,14 @@
           v-if="!$root.customize.disableExpiryOverride"
           class="col-md-6 col-12 order-1 order-md-2"
         >
-          <div class="row mb-3 justify-content-end">
+          <div class="row mb-3 justify-content-end align-items-center">
             <label
               class="col-md-6 col-form-label text-md-end"
               for="createSecretExpiry"
-            >{{ $t('label-expiry') }}</label>
+            >
+              <i class="fas fa-clock me-1 text-danger opacity-75" />
+              {{ $t('label-expiry') }}
+            </label>
             <div class="col-md-6">
               <select
                 v-model="selectedExpiry"
@@ -109,8 +122,9 @@
           </div>
         </div>
       </form>
-    </div>
-  </div>
+      </div><!-- /.card-body -->
+    </div><!-- /.ots-create-form -->
+  </div><!-- /.ots-create-split -->
 </template>
 <script>
 /* global maxSecretExpire */
@@ -346,8 +360,4 @@ export default {
 }
 </script>
 
-<style>
-label {
-  font-weight: bold;
-}
-</style>
+

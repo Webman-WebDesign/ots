@@ -1,16 +1,17 @@
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div class="card border-success-subtle mb-3">
-    <div
-      class="card-header bg-success-subtle"
-      v-html="$t('title-secret-created')"
-    />
+    <!-- Celebration banner -->
+    <div class="ots-success-banner">
+      <span class="ots-success-icon"><i class="fas fa-circle-check" /></span>
+      <p class="ots-success-title" v-html="$t('title-secret-created')" />
+    </div>
     <div class="card-body">
-      <p v-html="$t('text-pre-url')" />
+      <p class="text-muted mb-3" v-html="$t('text-pre-url')" />
       <div class="input-group mb-3">
         <input
           ref="secretUrl"
-          class="form-control"
+          class="form-control font-monospace"
           type="text"
           readonly
           :value="secretUrl"
@@ -22,14 +23,28 @@
         />
         <app-qr-button :qr-content="secretUrl" />
       </div>
-      <p v-html="$t('text-burn-hint')" />
-      <p v-if="expiresAt">
+      <p class="text-muted mb-1" v-html="$t('text-burn-hint')" />
+      <p
+        v-if="expiresAt"
+        class="mb-0 expiry-notice"
+      >
+        <i class="fas fa-clock me-1" />
         {{ $t('text-burn-time') }}
         <strong>{{ expiresAt.toLocaleString() }}</strong>
       </p>
     </div>
   </div>
 </template>
+<style scoped>
+.expiry-notice {
+  font-size: .875rem;
+  color: #2e7d32;
+  font-weight: 700;
+}
+[data-bs-theme=dark] .expiry-notice {
+  color: #86efac;
+}
+</style>
 <script>
 import appClipboardButton from './clipboard-button.vue'
 import appQrButton from './qr-button.vue'

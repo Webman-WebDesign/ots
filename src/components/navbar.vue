@@ -1,16 +1,17 @@
 <template>
-  <nav class="navbar navbar-expand-lg bg-primary-subtle">
-    <div class="container-fluid">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
       <a
-        class="navbar-brand"
+        class="navbar-brand d-flex align-items-center gap-2"
         href="#"
         @click.prevent="$root.navigate('/')"
       >
         <img
-          class="mr-1 logo"
+          class="logo"
           src="/favicon.png"
+          alt="logo"
         >
-        <span v-if="!$root.customize.disableAppTitle">Webman - One Time Secrets</span>
+        <span v-if="!$root.customize.disableAppTitle" class="brand-text">Webman OTS</span>
       </a>
 
       <button
@@ -29,31 +30,23 @@
         id="navbarSupportedContent"
         class="collapse navbar-collapse"
       >
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-2">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3 align-items-center">
           <li class="nav-item">
             <a
-              class="nav-link"
-              href="https://webman-webdesign.de"
-            >
-              <i class="fas fa-circle-info" /> Webman-Webdesign
-            </a>
-          </li>
-          <li class="nav-item">
-            <a
-              class="nav-link"
+              class="nav-link nav-link-new"
               href="#"
               @click.prevent="$root.navigate('/')"
             >
-              <i class="fas fa-plus" /> {{ $t('btn-new-secret') }}
+              <i class="fas fa-plus me-1" /> {{ $t('btn-new-secret') }}
             </a>
           </li>
         </ul>
         <form
           v-if="!$root.customize.disableThemeSwitcher"
-          class="d-flex align-items-center"
+          class="d-flex align-items-center gap-2"
         >
-          <i class="fas fa-sun me-2" />
-          <div class="form-check form-switch">
+          <i class="fas fa-sun theme-icon" />
+          <div class="form-check form-switch mb-0">
             <input
               id="themeswitch"
               v-model="$root.darkTheme"
@@ -62,7 +55,7 @@
               role="switch"
             >
           </div>
-          <i class="fas fa-moon" />
+          <i class="fas fa-moon theme-icon" />
         </form>
       </div>
     </div>
@@ -71,7 +64,36 @@
 
 <style scoped>
 .logo {
-  width: 28px;
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.3));
+}
+
+.form-check-input {
+  margin: 0 !important;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: .02em;
+  color: white;
+}
+
+.nav-link-new {
+  background: rgba(255,255,255,.15);
+  border-radius: 7px;
+  transition: background .18s ease;
+}
+
+.nav-link-new:hover {
+  background: rgba(255,255,255,.25) !important;
+}
+
+.theme-icon {
+  color: rgba(255,255,255,.75);
+  font-size: .88rem;
 }
 </style>
 

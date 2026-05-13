@@ -1,5 +1,5 @@
 <template>
-  <button
+  <a
     v-if="!$root.customize.disableQRSupport"
     id="secret-url-qrcode"
     ref="qrButton"
@@ -7,7 +7,7 @@
     :disabled="!qrDataURL"
   >
     <i class="fas fa-qrcode" />
-  </button>
+</a>
 </template>
 <script>
 import { Popover } from 'bootstrap'

@@ -1,6 +1,6 @@
 module github.com/Luzifer/ots/pkg/customization
 
-go 1.21.1
+go 1.23
 
 require (
 	github.com/pkg/errors v0.9.1

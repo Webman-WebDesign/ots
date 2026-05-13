@@ -1,6 +1,6 @@
 module github.com/Luzifer/ots/pkg/client
 
-go 1.21.1
+go 1.23
 
 replace github.com/Luzifer/ots/pkg/customization => ../customization
 

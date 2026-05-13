@@ -1,33 +1,41 @@
 # Stage 1: Build
-FROM alpine:3.18 AS builder
+FROM golang:1.23-alpine3.21 AS builder
 
-# Notwendige Build-Tools installieren
+# GNU-tar und andere Tools installieren
 RUN apk add --no-cache \
     curl \
     git \
-    go \
     make \
     nodejs \
     npm \
     gcc \
-    musl-dev
+    musl-dev \
+    tar \
+    gzip \
+    bash
 
 WORKDIR /app
 
-# 1. Quellcode kopieren
+# Quellcode kopieren
 COPY . .
 
-# 2. Frontend-Assets und Code-Generierung
-# Falls make fehlschlägt, liegt es oft an fehlenden npm-Berechtigungen
-RUN npm install && make download_libs
-RUN make generate-inner
-RUN make generate-apidocs
+# 1. Abhängigkeiten für das Frontend (npm ci ist im Makefile unter generate-inner)
+RUN npm ci --include=dev
 
-# 3. Go-Build vorbereiten
-# Wir setzen CGO_ENABLED=0 für eine statische Binary (besser für Alpine)
-# Wir nutzen 'go build' statt 'go install', um die Kontrolle über das Output-Verzeichnis zu haben
+# 2. Externe Libs (FontAwesome) manuell laden
+# Wir nutzen hier GNU tar, das wir oben installiert haben
+RUN VER_FONTAWESOME=6.4.0 && \
+    mkdir -p frontend && \
+    curl -sSfL https://github.com/FortAwesome/Font-Awesome/archive/${VER_FONTAWESOME}.tar.gz | \
+    tar -vC frontend -xz --strip-components=1 --wildcards --exclude='*/js-packages' '*/css' '*/webfonts'
+
+# 3. Assets generieren (Wir führen die Makefile-Schritte manuell aus, ohne 'docker run')
+RUN node ./ci/build.mjs
+RUN npx --yes @redocly/cli build-docs docs/openapi.yaml --disableGoogleFont true -o frontend/api.html
+
+# 4. Go-Binary bauen (statisches Build für Alpine)
 RUN export CGO_ENABLED=0 && \
-    go build -o /ots -ldflags "-X main.version=$(git describe --tags --always || echo dev)" -mod=readonly
+    go build -o /ots -ldflags "-s -w -X main.version=$(git describe --tags --always || echo dev)" -mod=readonly -trimpath
 
 # Stage 2: Runtime
 FROM alpine:3.18
@@ -36,12 +44,11 @@ RUN apk add --no-cache ca-certificates tzdata
 
 WORKDIR /app
 
-# Die fertig gebaute Binary und die benötigten Runtime-Files kopieren
+# Binary und Config kopieren
 COPY --from=builder /ots /usr/local/bin/ots
-COPY --from=builder /app/customize.yaml.example /etc/ots/customize.yaml
 
-# Ports und Startbefehl
+COPY --from=builder /app/frontend /app/frontend
+
 EXPOSE 3000
 
-ENTRYPOINT ["ots"]
-CMD ["-config", "/etc/ots/customize.yaml"]
+CMD ["ots"]

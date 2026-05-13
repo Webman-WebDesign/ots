@@ -4,47 +4,906 @@ $web-font-path: '';
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 @import "lato";
 
+/*
+ * =============================================================
+ *  WEBMAN OTS - Premium Design System
+ *  Lato: weight 400 (regular) + 700 (bold) only.
+ * =============================================================
+ */
+
+/* ------------------------------------------------------------- */
+/*  CSS Custom Properties                                         */
+/* ------------------------------------------------------------- */
 :root {
-  --bs-primary-bg-subtle: #910007;
-  --bs-primary-border-subtle: #910007;  
+  /* Brand */
+  --ots-red:           #8b0000;
+  --ots-red-mid:       #b71c1c;
+  --ots-red-bright:    #e53935;
+  --ots-grad-brand:    linear-gradient(135deg, #6d0000 0%, #c0392b 100%);
+  --ots-grad-success:  linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  --ots-grad-info:     linear-gradient(135deg, #01579b 0%, #0288d1 100%);
+
+  /* Geometry */
+  --ots-r-sm:   8px;
+  --ots-r:      16px;
+  --ots-r-lg:   24px;
+
+  /* Shadows */
+  --ots-sh-xs:  0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --ots-sh-sm:  0 2px 10px rgba(0,0,0,.08);
+  --ots-sh-md:  0 4px 24px rgba(0,0,0,.11);
+  --ots-sh-lg:  0 10px 48px rgba(0,0,0,.16);
+
+  /* Motion */
+  --ots-ease:  cubic-bezier(.4, 0, .2, 1);
+  --ots-dur:   200ms;
+
+  /* Bootstrap overrides */
+  --bs-primary:               var(--ots-red);
+  --bs-primary-rgb:           139,0,0;
+  --bs-primary-bg-subtle:     #fde8e8;
+  --bs-primary-border-subtle: #f5c0c0;
+  --bs-border-radius:         var(--ots-r-sm);
+  --bs-border-radius-lg:      var(--ots-r);
+  --bs-body-font-family:      'Lato', system-ui, sans-serif;
 }
 
+/* Light-mode */
 :root,
 [data-bs-theme=light] {
-  --bs-secondary: rgb(161, 0, 0);
-  --bs-success-border-subtle: #63ad46;
-  --bs-success-bg-subtle: #63ad46;
+  --ots-bg:          #f0eef8;
+  --ots-orb-a:       rgba(139,0,0,.09);
+  --ots-orb-b:       rgba(63,0,139,.07);
+  --ots-surface:     rgba(255,255,255,.88);
+  --ots-surface-alt: rgba(248,248,254,.90);
+  --ots-border:      rgba(0,0,0,.09);
+  --ots-text:        #1a1a2e;
+  --ots-muted:       #6b7280;
+  --ots-label:       #374151;
+  --ots-input-bg:    #ffffff;
+  --ots-input-ro:    #f4f5f9;
+  --ots-card-bg:     rgba(255,255,255,.90);
+  --ots-card-blur:   blur(18px);
+  --ots-nav-bg:      #940004;
+  --ots-nav-blur:    blur(20px);
+  --bs-body-bg:      var(--ots-bg);
+  --bs-body-color:   var(--ots-text);
+  --bs-secondary:    #64748b;
+  --bs-success-bg-subtle:     #dcfce7;
+  --bs-success-border-subtle: #86efac;
 }
 
-:root,
+/* Dark-mode */
 [data-bs-theme=dark] {
-  --bs-success-border-subtle: #325f21;
-  --bs-success-bg-subtle: #325f21;
+  --ots-bg:          #0b0b14;
+  --ots-orb-a:       rgba(139,0,0,.22);
+  --ots-orb-b:       rgba(60,0,130,.18);
+  --ots-surface:     rgba(16,18,32,.82);
+  --ots-surface-alt: rgba(10,12,24,.90);
+  --ots-border:      rgba(255,255,255,.10);
+  --ots-text:        #e8eaf0;
+  --ots-muted:       #9ca3af;
+  --ots-label:       #d1d5db;
+  --ots-input-bg:    rgba(28,32,52,.90);
+  --ots-input-ro:    rgba(18,22,40,.90);
+  --ots-card-bg:     rgba(16,18,36,.78);
+  --ots-card-blur:   blur(28px);
+  --ots-nav-bg:      #940004;
+  --ots-nav-blur:    blur(22px);
+  --bs-body-bg:      var(--ots-bg);
+  --bs-body-color:   var(--ots-text);
+  --bs-primary-bg-subtle:     #3a0005;
+  --bs-primary-border-subtle: #7a0000;
+  --bs-success-bg-subtle:     #14532d;
+  --bs-success-border-subtle: #166534;
 }
 
-:root {
-  textarea {
-    font-family: monospace !important;
-  }
+/* ------------------------------------------------------------- */
+/*  Base                                                          */
+/* ------------------------------------------------------------- */
+body,
+input, button, select, optgroup, textarea {
+  font-family: 'Lato', system-ui, sans-serif;
 }
 
+body {
+  min-height: 100vh;
+  background: var(--ots-bg);
+  color: var(--ots-text);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ambient gradient orbs rendered on the body background */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(90px);
+}
+
+body::before {
+  width: 65vw;
+  height: 65vw;
+  top: -22vw;
+  right: -16vw;
+  background: var(--ots-orb-a);
+}
+
+body::after {
+  width: 55vw;
+  height: 55vw;
+  bottom: -18vw;
+  left: -12vw;
+  background: var(--ots-orb-b);
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Monospace for secret textarea */
+textarea.form-control {
+  font-family: 'Courier New', Courier, monospace !important;
+  font-size: .9rem;
+  line-height: 1.65;
+}
+
+/* ------------------------------------------------------------- */
+/*  Navbar - glassmorphic                                         */
+/* ------------------------------------------------------------- */
 .navbar {
-  --bs-navbar-color: white !important;
-  --bs-navbar-brand-hover-color: white !important;
-  --bs-navbar-hover-color: white !important;
-  --bs-navbar-disabled-color: white !important;
-  --bs-navbar-brand-color: white !important;  
-  color: white !important;
+  background: var(--ots-nav-bg) !important;
+  backdrop-filter: var(--ots-nav-blur);
+  -webkit-backdrop-filter: var(--ots-nav-blur);
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 2px 20px rgba(0,0,0,.25);
+  padding: .8rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  --bs-navbar-color:              rgba(255,255,255,.85);
+  --bs-navbar-brand-color:        #ffffff;
+  --bs-navbar-brand-hover-color:  #ffffff;
+  --bs-navbar-hover-color:        #ffffff;
+  --bs-navbar-disabled-color:     rgba(255,255,255,.4);
+}
+
+.navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: .025em;
+  color: #ffffff !important;
+}
+
+.navbar .nav-link {
+  font-weight: 400;
+  font-size: .9rem;
+  color: rgba(255,255,255,.88) !important;
+  padding: .4rem .8rem;
+  border-radius: var(--ots-r-sm);
+  transition: background var(--ots-dur) var(--ots-ease);
+}
+
+.navbar .nav-link:hover {
+  color: #ffffff !important;
+  background: rgba(255,255,255,.14);
+}
+
+.navbar .navbar-toggler {
+  border-color: rgba(255,255,255,.35) !important;
+}
+
+.navbar .navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+/* ------------------------------------------------------------- */
+/*  Hero section (above the create card)                          */
+/* ------------------------------------------------------------- */
+.ots-hero {
+  text-align: center;
+  padding: 2.75rem 1rem 1.25rem;
+}
+
+.ots-hero__icon {
+  display: block;
+  font-size: 3.25rem;
+  background: var(--ots-grad-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: .75rem;
+}
+
+.ots-hero__title {
+  font-weight: 700;
+  font-size: 2.1rem;
+  color: var(--ots-text);
+  line-height: 1.15;
+  margin-bottom: .45rem;
+}
+
+.ots-hero__sub {
+  font-size: .98rem;
+  color: var(--ots-muted);
+  letter-spacing: .01em;
+  margin-bottom: 0;
+}
+
+@media (max-width: 576px) {
+  .ots-hero          { padding: 1.5rem 1rem .75rem; }
+  .ots-hero__icon    { font-size: 2.4rem; }
+  .ots-hero__title   { font-size: 1.55rem; }
+}
+
+/* ------------------------------------------------------------- */
+/*  Cards - glass panels                                          */
+/* ------------------------------------------------------------- */
+.card {
+  background: var(--ots-card-bg) !important;
+  backdrop-filter: var(--ots-card-blur);
+  -webkit-backdrop-filter: var(--ots-card-blur);
+  border: 1px solid var(--ots-border) !important;
+  border-radius: var(--ots-r) !important;
+  box-shadow: var(--ots-sh-md);
+  overflow: hidden;
+  transition:
+    box-shadow var(--ots-dur) var(--ots-ease),
+    transform  var(--ots-dur) var(--ots-ease);
+}
+
+.card:hover {
+  box-shadow: var(--ots-sh-lg);
+  transform: translateY(-2px);
 }
 
 .card-header {
-  color: white !important;
+  font-weight: 700;
+  font-size: .77rem;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  padding: .9rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  color: #ffffff !important;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+
+.card-body {
+  padding: 1.6rem 1.5rem;
+  color: var(--ots-text);
+}
+
+.card-header.bg-primary-subtle {
+  background: var(--ots-grad-brand) !important;
+  border-bottom-color: transparent !important;
+}
+
+.card-header.bg-success-subtle {
+  background: var(--ots-grad-success) !important;
+  border-bottom-color: transparent !important;
+}
+
+.card-header.bg-info-subtle {
+  background: var(--ots-grad-info) !important;
+  border-bottom-color: transparent !important;
+}
+
+.card.border-primary-subtle,
+.card.border-success-subtle,
+.card.border-info-subtle {
+  border-color: var(--ots-border) !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Create page: split layout                                     */
+/* ------------------------------------------------------------- */
+.ots-create-split {
+  display: flex !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.ots-create-brand {  
+  background: var(--ots-grad-brand) !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding: 2rem 1.5rem 1.25rem;
+}
+
+/* Decorative shapes in brand panel */
+.ots-create-brand::before {
+  content: '';
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  bottom: -70px;
+  right: -70px;
+}
+
+.ots-create-brand::after {
+  content: '';
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  top: -35px;
+  left: 30px;
+}
+
+.ots-brand-icon {
+  font-size: 3rem;
+  color: rgba(255,255,255,.95);
+  margin-bottom: 1.25rem;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,.3));
+}
+
+.ots-brand-heading {
+  font-weight: 700;
+  font-size: 1.45rem;
+  color: #ffffff;
+  margin-bottom: .7rem;
+  line-height: 1.25;
+  position: relative;
+  z-index: 1;
+}
+
+.ots-brand-desc {
+  font-size: .875rem;
+  color: rgba(255,255,255,.80);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ots-brand-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.ots-brand-features li {
+  font-size: .875rem;
+  color: rgba(255,255,255,.88);
+  padding: .3rem 0;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.ots-brand-features li i {
+  color: rgba(255,255,255,.65);
+  font-size: .8rem;
+  width: 14px;
+  text-align: center;
+}
+
+.ots-create-form {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.ots-create-form > .card-header {
+  background: transparent !important;
+  border-bottom: 1px solid var(--ots-border) !important;
+  color: var(--ots-text) !important;
+  padding: 1.1rem 1.5rem;
+  font-size: .77rem;
+}
+
+.ots-create-form > .card-header i {
+  color: var(--ots-red);
+}
+
+.ots-create-form > .card-body {
+  padding: 1.5rem;
+  flex: 1;
+}
+
+/* On mobile: hide brand panel, show full-width gradient header */
+@media (max-width: 991px) {
+  .ots-create-split {
+    flex-direction: column !important;
+  }
+
+  .ots-create-brand {
+    display: none !important;
+  }
+
+  .ots-create-form > .card-header {
+    background: var(--ots-grad-brand) !important;
+    color: #ffffff !important;
+    border-bottom-color: transparent !important;
+  }
+
+  .ots-create-form > .card-header i {
+    color: rgba(255,255,255,.8);
+  }
+}
+
+/* ------------------------------------------------------------- */
+/*  Buttons                                                       */
+/* ------------------------------------------------------------- */
+.btn {
+  font-weight: 700;
+  font-size: .9rem;
+  letter-spacing: .03em;
+  border-radius: var(--ots-r-sm) !important;
+  border: none !important;
+  padding: .6rem 1.4rem;
+  transition:
+    transform var(--ots-dur) var(--ots-ease),
+    box-shadow var(--ots-dur) var(--ots-ease),
+    filter     var(--ots-dur) var(--ots-ease);
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0,0,0,.24) !important;
+  filter: brightness(1.08);
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: var(--ots-sh-xs) !important;
+  filter: brightness(.96);
+}
+
+.btn-success,
+.btn.btn-success {
+  background: var(--ots-grad-success) !important;
+  color: #ffffff !important;
 }
 
 .btn.btn-success:disabled {
-  background-color: #159258 !important;
+  background: linear-gradient(135deg, #3a7a4a 0%, #5a9a68 100%) !important;
+  color: #ffffff !important;
+  opacity: .6;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
 }
 
-.btn.btn-success {
-  background-color: #0f834d !important;
+.btn-primary {
+  background: var(--ots-grad-brand) !important;
+  color: #ffffff !important;
 }
+
+.btn-secondary {
+  background: linear-gradient(135deg, #475569 0%, #64748b 100%) !important;
+  color: #ffffff !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Labels                                                        */
+/* ------------------------------------------------------------- */
+label {
+  font-weight: 700;
+  font-size: .875rem;
+  letter-spacing: .01em;
+  margin-bottom: .4rem;
+  color: var(--ots-label);
+}
+
+/* col-form-label uses padding (not margin) for vertical alignment with inputs */
+label.col-form-label {
+  font-weight: 700;
+  font-size: .875rem;
+  letter-spacing: .01em;
+  margin-bottom: 0;
+  color: var(--ots-label);
+  /* match our custom form-control padding so label aligns with the input */
+  padding-top: calc(.575rem + 2px);
+  padding-bottom: calc(.575rem + 2px);
+}
+
+.form-text {
+  font-size: .8rem;
+  color: var(--ots-muted);
+}
+
+/* ------------------------------------------------------------- */
+/*  Inputs                                                        */
+/* ------------------------------------------------------------- */
+.form-control,
+.form-select {
+  font-weight: 400;
+  font-size: .92rem;
+  background: var(--ots-input-bg) !important;
+  color: var(--ots-text) !important;
+  border: 1.5px solid var(--ots-border) !important;
+  border-radius: var(--ots-r-sm) !important;
+  padding: .575rem .875rem;
+  transition:
+    border-color var(--ots-dur) var(--ots-ease),
+    box-shadow   var(--ots-dur) var(--ots-ease);
+}
+
+.form-control::placeholder {
+  color: var(--ots-muted);
+  opacity: 1;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: var(--ots-input-bg) !important;
+  color: var(--ots-text) !important;
+  border-color: var(--ots-red) !important;
+  box-shadow: 0 0 0 3px rgba(139,0,0,.16) !important;
+  outline: none;
+}
+
+.form-control[readonly] {
+  background: var(--ots-input-ro) !important;
+  cursor: default;
+}
+
+/* File input — use Bootstrap negative-margin trick so button fills full height */
+.form-control[type="file"] {
+  padding: .575rem .875rem;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.form-control[type="file"]::file-selector-button {
+  font-weight: 700;
+  font-size: .875rem;
+  /* match input padding so button is flush top/bottom */
+  padding: .575rem .875rem;
+  margin-top: -.575rem;
+  margin-bottom: -.575rem;
+  margin-left: -.875rem;
+  margin-right: .875rem;
+  background: var(--ots-grad-brand);
+  color: #ffffff;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: filter var(--ots-dur) var(--ots-ease);
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+  filter: brightness(1.12);
+}
+
+/* Select arrow in brand colour */
+.form-select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%238b0000' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"),
+    none !important;
+  background-repeat: no-repeat !important;
+  background-position: right .75rem center !important;
+  background-size: 16px 12px !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Input Groups                                                  */
+/* ------------------------------------------------------------- */
+.input-group {
+  border-radius: var(--ots-r-sm);
+  overflow: hidden;
+  box-shadow: var(--ots-sh-sm);
+}
+
+.input-group > .form-control:not(:last-child) {
+  border-right: none !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.input-group .btn {
+  border-radius: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  min-width: 44px;
+}
+
+.input-group .btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  filter: brightness(1.1) !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Alerts                                                        */
+/* ------------------------------------------------------------- */
+.alert {
+  font-weight: 400;
+  font-size: .9rem;
+  border-radius: var(--ots-r-sm) !important;
+  border: none !important;
+}
+
+.alert-danger {
+  background: rgba(254,242,242,.92);
+  color: #7f1d1d;
+  border-left: 4px solid #ef4444 !important;
+  padding-left: 1.1rem;
+  backdrop-filter: blur(8px);
+}
+
+[data-bs-theme=dark] .alert-danger {
+  background: rgba(45,21,21,.88);
+  color: #fca5a5;
+  border-left-color: #ef4444 !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  List Group                                                    */
+/* ------------------------------------------------------------- */
+.list-group-item {
+  font-weight: 400;
+  font-size: .9rem;
+  border-color: var(--ots-border) !important;
+  background: var(--ots-input-bg) !important;
+  color: var(--ots-text) !important;
+  padding: .8rem 1.1rem;
+  transition: background var(--ots-dur) var(--ots-ease);
+}
+
+.list-group-item-action:hover {
+  background: var(--ots-input-ro) !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Theme switch (scoped to navbar — always on dark background)  */
+/* ------------------------------------------------------------- */
+
+/* Strip Bootstrap's block-layout defaults so the switch sits flush
+   in the navbar's d-flex align-items-center row */
+.navbar .form-check.form-switch {
+  display: flex;
+  align-items: center;
+  min-height: unset;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.navbar .form-check.form-switch .form-check-input {
+  margin-left: 0;
+}
+
+/* Track + thumb colours for a dark navbar background */
+.navbar .form-switch .form-check-input {
+  cursor: pointer;
+  width: 2.3em;
+  height: 1.25em;
+  background-color: rgba(255,255,255,.22);
+  border-color:     rgba(255,255,255,.30);
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='rgba(255,255,255,0.9)'/%3e%3c/svg%3e");
+}
+
+.navbar .form-switch .form-check-input:checked {
+  background-color: rgba(255,255,255,.70);
+  border-color:     rgba(255,255,255,.70);
+  --bs-form-switch-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23660000'/%3e%3c/svg%3e");
+}
+
+.navbar .fas.fa-sun,
+.navbar .fas.fa-moon {
+  color: rgba(255,255,255,.72);
+  font-size: .85rem;
+}
+
+/* ------------------------------------------------------------- */
+/*  Explanation list                                              */
+/* ------------------------------------------------------------- */
+.ots-explanation-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.ots-explanation-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: .7rem;
+  padding: .6rem 0;
+  font-size: .92rem;
+  color: var(--ots-text);
+  border-bottom: 1px solid var(--ots-border);
+  line-height: 1.55;
+}
+
+.ots-explanation-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ots-explanation-list li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ots-grad-brand);
+  margin-top: .47em;
+}
+
+/* ------------------------------------------------------------- */
+/*  Display URL: celebration banner                               */
+/* ------------------------------------------------------------- */
+.ots-success-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 1.5rem 1.25rem;
+  background: var(--ots-grad-success);
+  position: relative;
+  overflow: hidden;
+}
+
+.ots-success-banner::before {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.07);
+  top: -70px;
+  right: -50px;
+}
+
+.ots-success-banner::after {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.05);
+  bottom: -40px;
+  left: -30px;
+}
+
+.ots-success-icon {
+  font-size: 3rem;
+  color: #ffffff;
+  margin-bottom: .6rem;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,.2));
+}
+
+.ots-success-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 0;
+  letter-spacing: .01em;
+}
+
+/* ------------------------------------------------------------- */
+/*  Reveal screen: centred dramatic button                        */
+/* ------------------------------------------------------------- */
+.ots-reveal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  gap: 1.25rem;
+}
+
+.ots-reveal-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--ots-grad-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #ffffff;
+  box-shadow: 0 0 0 12px rgba(139,0,0,.10), var(--ots-sh-md);
+  flex-shrink: 0;
+}
+
+.ots-reveal-hint {
+  font-size: .95rem;
+  color: var(--ots-muted);
+  max-width: 360px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.ots-reveal-btn {
+  font-size: 1rem !important;
+  padding: .7rem 2rem !important;
+  letter-spacing: .04em;
+}
+
+/* Burned notice (shown after secret is revealed) */
+.ots-burned-notice {
+  display: flex;
+  align-items: center;
+  padding: .65rem 1rem;
+  border-radius: var(--ots-r-sm);
+  background: rgba(180, 60, 0, .10);
+  color: #b83c00;
+  font-size: .875rem;
+  font-weight: 700;
+  border-left: 3px solid #e65100;
+}
+
+[data-bs-theme=dark] .ots-burned-notice {
+  background: rgba(230, 81, 0, .15);
+  color: #ffb74d;
+  border-left-color: #ff6d00;
+}
+
+/* ------------------------------------------------------------- */
+/*  Utilities                                                     */
+/* ------------------------------------------------------------- */
+.text-muted {
+  color: var(--ots-muted) !important;
+}
+
+/* ------------------------------------------------------------- */
+/*  Page footer                                                   */
+/* ------------------------------------------------------------- */
+.form-text.text-center,
+.ots-footer {
+  text-align: center;
+  font-size: .78rem;
+  color: var(--ots-muted);
+  padding: 1.5rem 0 2rem;
+}
+
+.form-text.text-center a,
+.ots-footer a {
+  font-weight: 700;
+  color: var(--ots-red);
+  text-decoration: none;
+  transition: color var(--ots-dur) var(--ots-ease);
+}
+
+.form-text.text-center a:hover,
+.ots-footer a:hover {
+  color: var(--ots-red-bright);
+}
+
+/* ------------------------------------------------------------- */
+/*  Scrollbar                                                     */
+/* ------------------------------------------------------------- */
+::-webkit-scrollbar        { width: 6px; height: 6px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  { background: rgba(139,0,0,.28); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(139,0,0,.5); }
+
+/* ------------------------------------------------------------- */
+/*  Card entrance animation                                       */
+/* ------------------------------------------------------------- */
+@keyframes ots-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.card                 { animation: ots-fade-up .3s var(--ots-ease) both; }
+.card + .card         { animation-delay: .07s; }
+.card + .card + .card { animation-delay: .14s; }

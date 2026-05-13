@@ -3,12 +3,13 @@
   <div id="app">
     <app-navbar />
 
-    <div class="container mt-4">
+    <div class="container pb-5">
+
       <div
         v-if="error"
-        class="row justify-content-center"
+        class="row justify-content-center pt-5"
       >
-        <div class="col-8">
+        <div class="col-lg-8 col-md-10 col-12">
           <div
             class="alert alert-danger"
             role="alert"
@@ -17,17 +18,17 @@
         </div>
       </div>
 
-      <div class="row">
-        <div class="col">
+      <div class="row justify-content-center pt-5">
+        <div class="col-lg-8 col-md-10 col-12">
           <router-view @error="displayError" />
         </div>
       </div>
 
       <div
         v-if="!$root.customize.disablePoweredBy"
-        class="row mt-4"
+        class="row mt-2"
       >
-        <div class="col form-text text-center">
+        <div class="col ots-footer">
           {{ $t('text-powered-by') }}
           <a href="https://webman-webdesign.de">Webman OTS</a>
           {{ $root.version }}

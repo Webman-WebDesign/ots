@@ -5,8 +5,8 @@
       class="card-header bg-primary-subtle"
       v-html="$t('title-explanation')"
     />
-    <div class="card-body">
-      <ul>
+    <div class="card-body py-3">
+      <ul class="ots-explanation-list">
         <li
           v-for="(explanation, idx) in $t('items-explanation')"
           :key="`idx${idx}`"
