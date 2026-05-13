@@ -4,21 +4,34 @@ services:
       context: .
     restart: always
     environment:
-      # Optional, see "Customization" in README
-      #CUSTOMIZE: '/etc/ots/customize.yaml'
-      # See README for details
       REDIS_URL: redis://redis:6379/0
-      # 168h = 1w
       SECRET_EXPIRY: "604800"
-      # "mem" or "redis" (See README)
       STORAGE_TYPE: redis
       Password: ${PASSWORD}
+    healthcheck:
+      test: "curl -f http://localhost:3000"
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       - redis
-    ports:
-      - 3000:3000
+    networks:
+      - immich-internal
+      - global-proxy-network
   redis:
     image: redis:alpine
     restart: always
     volumes:
-      - ./data:/data
+      - ./data:/data      
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - immich-internal
+networks:
+  global-proxy-network:
+    external: true
+  immich-internal:
+    internal: true
