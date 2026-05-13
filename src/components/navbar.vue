@@ -51,6 +51,7 @@
               id="themeswitch"
               v-model="$root.darkTheme"
               class="form-check-input"
+              style="margin:0!important"
               type="checkbox"
               role="switch"
             >
