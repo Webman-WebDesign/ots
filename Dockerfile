@@ -40,7 +40,7 @@ RUN export CGO_ENABLED=0 && \
 # Stage 2: Runtime
 FROM alpine:3.18
 
-RUN apk add --no-cache ca-certificates tzdata
+RUN apk add --no-cache ca-certificates tzdata curl
 
 WORKDIR /app
 
