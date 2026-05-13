@@ -1,48 +1,49 @@
-FROM luzifer/archlinux as builder
+# Stage 1: Build
+FROM alpine:3.18 AS builder
 
-ENV CGO_ENABLED=0 \
-    GOPATH=/go \
-    NODE_ENV=production
+# Installiere Build-Abhängigkeiten für Go und Node.js
+RUN apk add --no-cache \
+    curl \
+    git \
+    go \
+    make \
+    nodejs \
+    npm \
+    tar \
+    unzip \
+    gcc \
+    musl-dev
 
-COPY . /go/src/github.com/Luzifer/ots
-WORKDIR /go/src/github.com/Luzifer/ots
+WORKDIR /app
 
-RUN set -ex \
- && pacman --noconfirm -Syy \
-      curl \
-      git \
-      go \
-      make \
-      nodejs-lts-hydrogen \
-      npm \
-      tar \
-      unzip \
- && make download_libs generate-inner generate-apidocs \
- && go install \
-      -ldflags "-X main.version=$(git describe --tags --always || echo dev)" \
-      -mod=readonly
+# Kopiere die Source-Dateien
+COPY . .
 
+# Führe die Build-Schritte aus dem Original-Repo aus
+# Wir nutzen --unsafe-perm, falls npm Probleme mit Root-Rechten hat
+RUN make download_libs
+RUN make generate-inner
+RUN make generate-apidocs
 
-FROM alpine:latest
+# Go-Binary bauen
+RUN go install -ldflags "-X main.version=$(git describe --tags --always || echo dev)" -mod=readonly
 
-LABEL org.opencontainers.image.authors='Knut Ahlers <knut@ahlers.me>' \
-    org.opencontainers.image.version='1.12.0' \
-    org.opencontainers.image.url='https://hub.docker.com/r/luzifer/ots/' \
-    org.opencontainers.image.documentation='https://github.com/Luzifer/ots/wiki' \
-    org.opencontainers.image.source='https://github.com/Luzifer/ots' \
-    org.opencontainers.image.licenses='Apache-2.0'
+# Stage 2: Runtime
+FROM alpine:3.18
 
-RUN set -ex \
- && apk --no-cache add \
-      ca-certificates
+# Installiere nur die Laufzeit-Abhängigkeiten
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata
 
-COPY --from=builder /go/bin/ots /usr/local/bin/ots
+WORKDIR /app
 
+# Kopiere die gebaute Binary vom Builder
+COPY --from=builder /root/go/bin/ots /usr/local/bin/ots
+COPY --from=builder /app/customize.yaml.example /etc/ots/customize.yaml
+
+# Ports und Startbefehl
 EXPOSE 3000
 
-USER 1000:1000
-
-ENTRYPOINT ["/usr/local/bin/ots"]
-CMD ["--"]
-
-# vim: set ft=Dockerfile:
+ENTRYPOINT ["ots"]
+CMD ["-config", "/etc/ots/customize.yaml"]
