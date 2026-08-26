@@ -7,11 +7,66 @@
 
 `ots` is a one-time-secret sharing platform. The secret is encrypted with a symmetric 256bit AES encryption in the browser before being sent to the server. Afterwards an URL containing the ID of the secret and the password is generated. The password is never sent to the server so the server will never be able to decrypt the secrets it delivers with a reasonable effort. Also the secret is immediately deleted on the first read.
 
+```markdown
+> **Fork notice.** This is a fork of
+> [Luzifer/ots](https://github.com/Luzifer/ots), rebranded and restyled for
+> Webman Webdesign. The application logic is upstream's and unchanged.
+>
+> - Upstream version: 1.12.0 (see `History.md`)
+> - Upstream commit: _(fill in)_
+>
+> **Local changes:**
+>
+> | File | Change |
+> | --- | --- |
+> | `src/style.scss` | Replaced with the "Webman OTS" design system — CSS custom properties for brand colours, radii and gradients on top of Bootstrap |
+> | `src/components/navbar.vue` | Brand text "Webman OTS" |
+> | `src/app.vue` | Footer links to webman-webdesign.de |
+> | `src/components/create.vue` | Pre-filled placeholder in the secret field |
+> | `frontend/favicon*.png` | Webman logo |
+>
+> Everything below is upstream documentation. When updating from upstream, the
+> five files above are the ones that need re-applying.
+```
+
+The "upstream commit" line is the part that matters most. Without a recorded base
+point the fork cannot be diffed against upstream later — the same gap the OSMap
+fork (`plg_osmap_wm_joomla`) and the JoRobo copy have.
+
 ## Features
 
 - AES 256bit encryption
 - Server does never get the password
 - Secret is deleted on first read
+
+## File structure
+
+```
+main.go                      Entry point: flags, HTTP server, static frontend
+api.go                       The API — create, fetch, isWritable
+storage.go                   Storage backend selection (mem / redis)
+helpers.go, tplFuncs.go      Small helpers
+ 
+pkg/
+├── storage/                 The storage backends themselves
+├── customization/           Loads the customization YAML (own Go module)
+├── client/                  Go client, shared with the CLI
+└── metrics/                 Prometheus metrics
+ 
+cmd/ots-cli/                 The command line client
+ 
+src/                         Frontend sources (Vue 3, Bootstrap, SCSS)
+├── app.vue                  Root component, routing, footer
+├── style.scss               >>> Webman design system <<<
+└── components/              navbar, create, display, …
+ 
+frontend/                    Build output plus the icons — this is what the
+                             binary embeds
+ci/build.mjs                 The frontend build
+i18n.yaml                    All translations in one file
+docs/                        OpenAPI spec, OTSMeta format, k8s example
+Dockerfile, Dockerfile.minimal, compose.yaml
+```
 
 ## Setup
 
@@ -29,6 +84,26 @@ For a better setup you can choose the backend which is used to store the secrets
   - `REDIS_KEY` - Key prefix to store the keys under (Default `io.luzifer.ots`)
 - Common options
   - `SECRET_EXPIRY` - Expiry of the keys in seconds (Default `0` = no expiry)
+
+## Building this fork
+
+The frontend is compiled into the Go binary, so a change to any `.vue` or `.scss`
+file needs a rebuild — editing the file alone changes nothing in a running
+instance.
+ 
+```sh
+# Frontend (runs in a node:18 container, no local Node needed)
+make generate
+ 
+# Or, with a local Node toolchain
+make generate-inner
+ 
+# Binary including the compiled frontend
+make build-local
+```
+ 
+`make generate` writes into `frontend/`; `make build-local` embeds that directory
+and produces the `ots` binary. `docker compose up --build` does both in one step.
 
 ### Customization
 
